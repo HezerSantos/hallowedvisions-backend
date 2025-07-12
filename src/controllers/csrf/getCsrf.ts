@@ -11,7 +11,6 @@ const getCsrfController: RequestHandler = async(req, res, next) => {
         const csrfValue = crypto.randomBytes(32).toString('hex')
 
         const csrfToken:string = jwt.sign({csrfToken: csrfValue}, String(process.env.CSRF_SECRET), {expiresIn: '15m'})
-        console.log(req.cookies)
         res.cookie('__Secure-auth.csrf', csrfToken, {
             httpOnly: false, 
             secure: true, 
@@ -20,6 +19,7 @@ const getCsrfController: RequestHandler = async(req, res, next) => {
             path: "/",
             domain: process.env.NODE_ENV === "production"? ".hallowedvisions.com" : ""
         })
+
 
         res.status(200).end()
     } catch(error) {
