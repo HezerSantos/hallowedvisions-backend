@@ -1,7 +1,7 @@
 interface ErrorDetails {
     (message: string,
     status: number,
-    json: Record<string, any>): void
+    json: Record<string, any>[]): void
 }
 
 interface HttpErrorDetails {
@@ -12,9 +12,9 @@ interface HttpErrorDetails {
 
 class HttpError extends Error implements HttpErrorDetails{
   status: number
-  json: Record<string, any>
+  json: Record<string, any>[]
 
-  constructor(message: string, status: number, json: Record<any, string>) {
+  constructor(message: string, status: number, json: Record<any, string>[]) {
     super(message)
     this.status = status
     this.json = json
@@ -26,3 +26,4 @@ const throwError: ErrorDetails = (message, status, json) => {
   throw new HttpError(message, status, json)
 }
 
+export default throwError
