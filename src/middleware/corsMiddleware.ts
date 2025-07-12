@@ -10,12 +10,14 @@ const allowedOrigins: string[] = [
 const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
     if (!origin) {
+      console.log('CORS allowed for:', origin);
       return callback(null, true);
     } 
-
     if(allowedOrigins.indexOf(origin) !== -1){
+      console.log('CORS allowed for:', origin);
       return callback(null, true)
     }else {
+      console.warn('Blocked CORS for:', origin);
       return callback(new Error("CORS not allowed for this origin"), false);
     }
   
