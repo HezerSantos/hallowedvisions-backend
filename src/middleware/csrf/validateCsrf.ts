@@ -14,8 +14,10 @@ interface DecodedType {
 
 const verifyCsrf: VerifyCsrfType = (cookieCsrfToken, headerCsrfToken) => {
     const decoded = jwt.verify(cookieCsrfToken, CSRF_SECRET)
-
     const csrfToken = (decoded as DecodedType).csrfToken
+
+    console.log(csrfToken)
+    console.log(headerCsrfToken)
 
     if(headerCsrfToken !== csrfToken){
         return false
@@ -25,9 +27,8 @@ const verifyCsrf: VerifyCsrfType = (cookieCsrfToken, headerCsrfToken) => {
 }
 const validateCsrf: RequestHandler = (req, res, next) => {
     try{
-        const headerCsrfToken = String(req.headers['__Secure-auth.csrf'])
+        const headerCsrfToken = String(req.headers['csrftoken'])
         const cookieCsrfToken = req.cookies['__Secure-auth.csrf']
-
         if(!headerCsrfToken){
             throwError("403 Forbidden", 403, [{msg: "Unauthorized"}])
         }

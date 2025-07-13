@@ -10,11 +10,9 @@ const allowedOrigins: string[] = [
 const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
     if (!origin) {
-      console.log('CORS allowed for:', origin);
       return callback(null, true);
     } 
     if(allowedOrigins.indexOf(origin) !== -1){
-      console.log('CORS allowed for:', origin);
       return callback(null, true)
     }else {
       console.warn('Blocked CORS for:', origin);
@@ -28,7 +26,7 @@ const corsOptions: CorsOptions = {
     "Authorization", 
     "Cookie", 
     "Set-Cookie", 
-    "csrfToken"
+    'csrfToken'
 ],
   credentials: true, // Allow cookies to be sent
   optionsSuccessStatus: 200
