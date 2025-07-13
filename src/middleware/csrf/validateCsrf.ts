@@ -16,8 +16,8 @@ const verifyCsrf: VerifyCsrfType = (cookieCsrfToken, headerCsrfToken) => {
     const decoded = jwt.verify(cookieCsrfToken, CSRF_SECRET)
     const csrfToken = (decoded as DecodedType).csrfToken
 
-    console.log(csrfToken)
-    console.log(headerCsrfToken)
+    // console.log(csrfToken)
+    // console.log(headerCsrfToken)
 
     if(headerCsrfToken !== csrfToken){
         return false
