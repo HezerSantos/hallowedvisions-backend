@@ -34,9 +34,9 @@ const getPortfolioAssets: RequestHandler = async(req, res, next) => {
 
 
 
-        const [profileImageUrl, portfolioProjects] = await Promise.all(promises)
+        const [profileImageUrl, portfolioProjects]: [string, PortfolioProjects[]] = await Promise.all(promises) as [string, PortfolioProjects[]]
         const portfolioProjectPromises = portfolioProjects.map(async(project: PortfolioProjects) => {
-            const imageUrl = await getR2Object("hallowedvisions", project.imageName)
+            const imageUrl = await getR2Object("hallowedvisions", project.imageName as string)
             const languagesPrimitive = project.languages
             
             return {
