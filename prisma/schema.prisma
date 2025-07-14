@@ -6,10 +6,37 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "./prisma"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+
+model PortfolioItems {
+  id          Int                @id @default(autoincrement())
+  name        String
+  description String
+  demoUrl     String
+  type        String
+  imageName   String?
+  languages   PortfolioLanguages[]
+}
+
+model Languages {
+  id              Int                @id @default(autoincrement())
+  name            String
+  portfolioItems  PortfolioLanguages[]
+}
+
+model PortfolioLanguages {
+  portfolioItemId Int
+  languageId      Int
+
+  portfolioItem   PortfolioItems @relation(fields: [portfolioItemId], references: [id])
+  language        Languages      @relation(fields: [languageId], references: [id])
+
+  @@id([portfolioItemId, languageId])
 }
