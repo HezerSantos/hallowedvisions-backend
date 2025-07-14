@@ -15,17 +15,28 @@ datasource db {
 }
 
 
-const PortfolioItems {
-  id Int @id @default(autoincrement())
-  name String
+model PortfolioItems {
+  id          Int                @id @default(autoincrement())
+  name        String
   description String
-  languageId Int
-  languages Languages[] @relation(PortfolioLanguages)
+  demoUrl     String
+  type        String
+  imageName   String?
+  languages   PortfolioLanguages[]
 }
 
-const Languages {
-  id Int @id @default(autoincrement())
-  name String
+model Languages {
+  id              Int                @id @default(autoincrement())
+  name            String
+  portfolioItems  PortfolioLanguages[]
+}
 
-  portfolioItems PortfolioItems @relation("PortfolioLanguages", fields: [languageId], references: [id])
+model PortfolioLanguages {
+  portfolioItemId Int
+  languageId      Int
+
+  portfolioItem   PortfolioItems @relation(fields: [portfolioItemId], references: [id])
+  language        Languages      @relation(fields: [languageId], references: [id])
+
+  @@id([portfolioItemId, languageId])
 }
