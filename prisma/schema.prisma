@@ -13,3 +13,19 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+const PortfolioItems {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  languageId Int
+  languages Languages[] @relation(PortfolioLanguages)
+}
+
+const Languages {
+  id Int @id @default(autoincrement())
+  name String
+
+  portfolioItems PortfolioItems @relation("PortfolioLanguages", fields: [languageId], references: [id])
+}
