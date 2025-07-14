@@ -4,7 +4,8 @@ dotenv.config()
 
 const allowedOrigins: string[] = [
     String(process.env.CLIENT_URL),
-    "http://localhost:5173"
+    "http://localhost:5173",
+    "http://localhost:3000"
 ]
 
 const corsOptions: CorsOptions = {
