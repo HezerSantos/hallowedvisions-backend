@@ -29,7 +29,7 @@ const validateCsrf: RequestHandler = (req, res, next) => {
     try{
         const headerCsrfToken = String(req.headers['csrftoken'])
         const cookieCsrfToken = req.cookies['__Secure-auth.csrf']
-        if(!headerCsrfToken){
+        if(!headerCsrfToken || !cookieCsrfToken){
             throwError("403 Forbidden", 403, [{msg: "Unauthorized"}])
         }
 
