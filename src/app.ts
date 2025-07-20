@@ -9,6 +9,8 @@ import csrfRouter from './routes/csrf/csrfRouter'
 import homeRouter from './routes/home/homeRouter'
 import validateCsrf from './middleware/csrf/validateCsrf'
 import portfolioRouter from './routes/portfolio/portfolioRouter'
+import authRouter from './routes/auth/authRouter'
+import verifyAuthToken from './middleware/auth/verifyAuthToken'
 dotenv.config()
 const app = express()
 app.set('trust proxy', 1)
@@ -17,6 +19,9 @@ app.use(helmet)
 app.use(bodyParser)
 app.use(cors)
 
+app.use("/api/auth", authRouter)
+
+app.use(verifyAuthToken)
 app.use("/api/csrf", csrfRouter)
 app.use("/api/home", validateCsrf, homeRouter)
 app.use('/api/portfolio', validateCsrf, portfolioRouter)
