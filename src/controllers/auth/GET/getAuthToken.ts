@@ -35,7 +35,7 @@ const getAuthToken: RequestHandler = async(req, res, next) => {
             return
         }
 
-        const authToken = jwt.sign({target: "guser"}, AUTH_SECRET, {expiresIn: '15m'})
+        const authToken = jwt.sign({target: "guset"}, AUTH_SECRET, {expiresIn: '15m'})
 
         res.cookie('__Secure-auth.access', authToken, {
             httpOnly: false, 
