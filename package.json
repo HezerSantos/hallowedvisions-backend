@@ -23,6 +23,7 @@
     "exrpess": "^0.0.1-security",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
+    "resend": "^4.7.0",
     "tslib": "^2.8.1"
   },
   "devDependencies": {
