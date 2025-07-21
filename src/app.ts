@@ -13,6 +13,7 @@ import authRouter from './routes/auth/authRouter'
 import verifyAuthToken from './middleware/auth/verifyAuthToken'
 import homeLimiter from './ratelimiters/homeLimiter'
 import portfolioLimiter from './ratelimiters/portfolioLimiter'
+import emailRouter from './routes/email/emailRouter'
 dotenv.config()
 const app = express()
 app.set('trust proxy', 1)
@@ -27,6 +28,7 @@ app.use(verifyAuthToken)
 app.use("/api/csrf", csrfRouter)
 app.use("/api/home", validateCsrf, homeLimiter, homeRouter)
 app.use('/api/portfolio', validateCsrf, portfolioLimiter, portfolioRouter)
+app.use("/api/email", validateCsrf, emailRouter)
 app.use(errorMiddleware)
 const PORT = Number(process.env.PORT) || 8080
 app.listen(PORT, '0.0.0.0', () => {
