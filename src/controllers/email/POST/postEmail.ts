@@ -4,6 +4,7 @@ import validateEmailBody from "../../../validation/email/emailValidator";
 import { validationResult } from "express-validator";
 import throwError from "../../../helpers/errorHelper";
 import prisma from "../../../config/prisma";
+import emailLimiter from "../../../ratelimiters/emailLimiter";
 interface EmailDetails {
   firstName: string;
   lastName: string;
@@ -28,6 +29,7 @@ const incrementEmailCount = async() => {
 }
 const postEmail= [
     ...validateEmailBody,
+    emailLimiter,
     async(req: Request, res: Response, next: NextFunction) => {
         try{
 
@@ -40,7 +42,7 @@ const postEmail= [
             const emailCount = await prisma.emailCounter.findFirst()
             if(emailCount){
                 if(emailCount.count >= 2800){
-                    throwError("Email Count Exceeded", 429, [{msg: "Not Accepting Emails At the moment"}])
+                    throwError("Email Count Exceeded", 429, [{msg: "We're not accepting messages through the website at the moment. Please email us directly at contact@hallowedvisions.com"}])
                 }  
             }
             const {error} = await resend.emails.send({
@@ -73,7 +75,6 @@ const postEmail= [
                 throwError(error.message, 500, [{msg: "Error Sending Email"}])
             }
             await incrementEmailCount()
-
             res.status(200).json([{msg: "Thanks We Got the Message"}])
         } catch (error) {
             next(error)
