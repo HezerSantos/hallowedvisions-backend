@@ -40,3 +40,8 @@ model PortfolioLanguages {
 
   @@id([portfolioItemId, languageId])
 }
+
+model EmailCounter {
+  id  Int @id @default(autoincrement())
+  count Int
+}
