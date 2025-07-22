@@ -4,7 +4,6 @@ import validateEmailBody from "../../../validation/email/emailValidator";
 import { validationResult } from "express-validator";
 import throwError from "../../../helpers/errorHelper";
 import prisma from "../../../config/prisma";
-import emailLimiter from "../../../ratelimiters/emailLimiter";
 interface EmailDetails {
   firstName: string;
   lastName: string;
@@ -29,7 +28,6 @@ const incrementEmailCount = async() => {
 }
 const postEmail= [
     ...validateEmailBody,
-    emailLimiter,
     async(req: Request, res: Response, next: NextFunction) => {
         try{
 
