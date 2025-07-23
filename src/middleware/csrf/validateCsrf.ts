@@ -42,8 +42,8 @@ const verifyCsrf: VerifyCsrfType = (cookieCsrfToken, headerCsrfToken) => {
     const csrfCookie = decoded as DecodedType
 
     const csrfToken = transformCookie(csrfCookie.csrfToken, csrfCookie.key)
-    console.log(csrfCookie.csrfToken)
-    console.log(headerCsrfToken)
+    // console.log(csrfCookie.csrfToken)
+    // console.log(headerCsrfToken)
 
     if(headerCsrfToken !== csrfToken){
         return false
