@@ -15,8 +15,11 @@ import homeLimiter from './ratelimiters/homeLimiter'
 import portfolioLimiter from './ratelimiters/portfolioLimiter'
 import emailRouter from './routes/email/emailRouter'
 import emailLimiter from './ratelimiters/emailLimiter'
+import robotsRouter from './routes/robots/robotsRouter'
 dotenv.config()
 const app = express()
+
+app.use("/robots.txt", robotsRouter)
 app.set('trust proxy', 1)
 app.use(cookieParser)
 app.use(helmet)
