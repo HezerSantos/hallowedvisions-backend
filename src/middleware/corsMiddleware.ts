@@ -10,6 +10,7 @@ const allowedOrigins: string[] = [
 
 const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
+    console.log("Cors Origin:", origin)
     if (!origin) {
       return callback(null, true);
     } 
