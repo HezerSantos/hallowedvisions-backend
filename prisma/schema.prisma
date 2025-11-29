@@ -19,10 +19,12 @@ model PortfolioItems {
   id          Int                @id @default(autoincrement())
   name        String
   description String
+  extendedDescription String?
   demoUrl     String
   type        String
   imageName   String?
   languages   PortfolioLanguages[]
+  projectImages ProjectImages[]
 }
 
 model Languages {
@@ -44,4 +46,12 @@ model PortfolioLanguages {
 model EmailCounter {
   id  Int @id @default(autoincrement())
   count Int
+}
+
+model ProjectImages {
+  id Int @id @default(autoincrement())
+  url String
+
+  portfolioItemId Int
+  portfolioItem PortfolioItems @relation(fields: [portfolioItemId], references: [id])
 }
