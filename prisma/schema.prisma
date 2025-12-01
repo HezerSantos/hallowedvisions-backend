@@ -25,6 +25,9 @@ model PortfolioItems {
   imageName   String?
   languages   PortfolioLanguages[]
   dirKey      String?
+  githubUrl   String?
+  month       String?
+  year        String?
 }
 
 model Languages {

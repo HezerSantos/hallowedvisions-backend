@@ -44,12 +44,15 @@ const getProjectAssets: RequestHandler = async(req, res, next) => {
         res.json({
             name: result.name,
             demoUrl: result.demoUrl,
+            githubUrl: result.githubUrl,
             imageOne: headerImage,
             imageTwo: headerImage,
             aboutDescription: result.description,
             extendedDescription: result.extendedDescription,
             technologies: result.languages.map(languageJoin => languageJoin.language.name),
-            gallery: signedUrls
+            gallery: signedUrls,
+            month: result.month,
+            year: result.year
         })
     } catch (error) {
         next(error)
