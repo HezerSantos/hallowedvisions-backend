@@ -24,7 +24,7 @@ model PortfolioItems {
   type        String
   imageName   String?
   languages   PortfolioLanguages[]
-  projectImages ProjectImages[]
+  dirKey      String?
 }
 
 model Languages {
@@ -46,12 +46,4 @@ model PortfolioLanguages {
 model EmailCounter {
   id  Int @id @default(autoincrement())
   count Int
-}
-
-model ProjectImages {
-  id Int @id @default(autoincrement())
-  url String
-
-  portfolioItemId Int
-  portfolioItem PortfolioItems @relation(fields: [portfolioItemId], references: [id])
 }
