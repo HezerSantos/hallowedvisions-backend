@@ -19,10 +19,15 @@ model PortfolioItems {
   id          Int                @id @default(autoincrement())
   name        String
   description String
+  extendedDescription String?
   demoUrl     String
   type        String
   imageName   String?
   languages   PortfolioLanguages[]
+  dirKey      String?
+  githubUrl   String?
+  month       String?
+  year        String?
 }
 
 model Languages {

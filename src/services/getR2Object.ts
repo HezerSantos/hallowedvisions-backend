@@ -1,4 +1,4 @@
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, GetObjectCommand, ListObjectsV2Command, ListObjectsV2CommandOutput } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import dotenv from 'dotenv'
 dotenv.config()
@@ -30,6 +30,20 @@ const getR2Object: GetR2ObjectType = async(bucket, key) => {
     )
 
     return url
+}
+
+
+type RetrieveProjectImagesType = (
+    bucket: string,
+    dirKey: string
+) => Promise<ListObjectsV2CommandOutput>
+
+//
+
+export const retrieveProjectImages: RetrieveProjectImagesType = async(bucket, dirKey) => {
+    const projectObjects = await S3.send(new ListObjectsV2Command({Bucket: bucket, Prefix: dirKey}))
+
+    return projectObjects
 }
 
 export default getR2Object

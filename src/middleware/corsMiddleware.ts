@@ -28,7 +28,8 @@ const corsOptions: CorsOptions = {
     "Authorization", 
     "Cookie", 
     "Set-Cookie", 
-    'csrfToken'
+    'csrfToken',
+    'server-id'
 ],
   credentials: true, // Allow cookies to be sent
   optionsSuccessStatus: 200
