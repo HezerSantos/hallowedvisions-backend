@@ -7,6 +7,10 @@ const getProjectAssets: RequestHandler = async(req, res, next) => {
     try{
         const projectId = req.params.id
 
+        if (!projectId || isNaN(Number(projectId))) {
+            throwError("Project Not Found", 404, []);
+            return;
+        }
         const result = await prisma.portfolioItems.findUnique({
             where: { id: parseInt(projectId) },
             include: {
@@ -19,9 +23,8 @@ const getProjectAssets: RequestHandler = async(req, res, next) => {
                 }
             }
         })
-
         if (!result) {
-            throwError("Error fetching dirKey", 400, [{msg: "Invalid Key", code: "INVALID_KEY"}])
+            throwError("Error fetching dirKey", 404, [{msg: "Invalid Key", code: "INVALID_EXIST"}])
             return
         }
 
