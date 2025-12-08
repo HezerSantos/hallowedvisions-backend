@@ -11,7 +11,6 @@ interface cacheValue {
 const cache = new Map<string, cacheValue>()
 const getHomeAssets: RequestHandler = async(req, res, next) => {
     try{
-        console.log(cache)
         const cachedValue = cache.get('url');
         if (cachedValue && cachedValue.expiration > Date.now()) {
             return res.json({ url: cachedValue.value });
