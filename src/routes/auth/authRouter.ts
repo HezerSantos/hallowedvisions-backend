@@ -1,9 +1,10 @@
 import { Router } from "express";
-import getAuthToken from "../../controllers/auth/GET/getAuthToken";
+import getAuthToken from "../../controllers/auth/getAuthToken";
+import refreshToken from "../../controllers/auth/refreshToken";
 
-const authRouter = Router()
+const authRouter = Router();
 
+authRouter.post("/public", getAuthToken);
+authRouter.post("/public/refresh", refreshToken);
 
-authRouter.get("/", getAuthToken)
-
-export default authRouter
+export default authRouter;
