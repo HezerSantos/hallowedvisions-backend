@@ -7,7 +7,6 @@ import cors from "./middleware/corsMiddleware";
 import errorMiddleware from "./middleware/errors/errorMiddleware";
 import csrfRouter from "./routes/csrf/csrfRouter";
 import homeRouter from "./routes/home/homeRouter";
-import validateCsrf from "./middleware/csrf/validateCsrf";
 import portfolioRouter from "./routes/portfolio/portfolioRouter";
 import authRouter from "./routes/auth/authRouter";
 import verifyAuthToken from "./middleware/auth/verifyAuthToken";

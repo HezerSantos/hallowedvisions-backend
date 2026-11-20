@@ -1,9 +1,8 @@
-import { Router } from 'express'
-import getHomeAssets from '../../controllers/home/GET/getHomeAssets'
+import { Router } from "express";
+import getHomeAssets from "../../controllers/home/getHomeAssets";
 
-const homeRouter = Router()
+const homeRouter = Router();
 
+homeRouter.get("/", getHomeAssets);
 
-homeRouter.get("/", getHomeAssets)
-
-export default homeRouter
+export default homeRouter;
