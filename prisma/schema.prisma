@@ -50,3 +50,32 @@ model EmailCounter {
   id  Int @id @default(autoincrement())
   count Int
 }
+
+model WorkExperience {
+  id        Int     @id @default(autoincrement())
+  name      String?
+  imageKey  String?
+
+  position  String
+  type      String
+  location  String
+  remote    Boolean
+
+  startPeriod Int
+  endPeriod   Int?
+
+  // Flattened self-relation representing `child?: ExperienceItemProps`
+  parentId Int?             @unique
+  parent   WorkExperience?  @relation("WorkExperienceChild", fields: [parentId], references: [id])
+  child    WorkExperience?  @relation("WorkExperienceChild")
+
+  bullets ExperienceBullet[]
+}
+
+model ExperienceBullet {
+  id               Int            @id @default(autoincrement())
+  text             String
+  order            Int            @default(0)
+  workExperienceId Int
+  workExperience   WorkExperience @relation(fields: [workExperienceId], references: [id], onDelete: Cascade)
+}
