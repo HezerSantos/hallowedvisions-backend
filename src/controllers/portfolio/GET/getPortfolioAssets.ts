@@ -12,58 +12,31 @@ interface PortfolioProjects {
   languages: Record<string, Record<string, string>>[];
 }
 
-const workExperienceWithRelations =
-  Prisma.validator<Prisma.WorkExperienceDefaultArgs>()({
-    include: {
-      bullets: {
-        orderBy: { order: "asc" },
-      },
-      child: {
-        include: {
-          bullets: {
-            orderBy: { order: "asc" },
-          },
-          child: true,
-        },
-      },
-    },
-  });
+export interface WorkExperienceItemEntryBullet {
+  id: string;
+  text: string;
+  order: number;
+  workExperienceItemEntryId: string;
+}
 
-type WorkExperienceWithRelations = Prisma.WorkExperienceGetPayload<
-  typeof workExperienceWithRelations
->;
-
-type ExperienceNode = {
-  id: number;
-  name: string | null;
-  type: string;
-  imageKey: string | null;
+export interface WorkExperienceItemEntry {
+  id: string;
   position: string;
+  type: string;
   location: string;
   remote: boolean;
   startPeriod: number;
   endPeriod: number | null;
-  parentId: number | null;
-  bullets?: {
-    id: number;
-    text: string;
-    order: number;
-    workExperienceId: number;
-  }[];
-  child?: ExperienceNode | null;
-};
+  orderNumber: number;
+  workExperienceItemId: string;
+  bullets: WorkExperienceItemEntryBullet[];
+}
 
-interface ExperienceItem {
-  header?: { name: string; imageUrl: string };
-  meta: {
-    position: string;
-    type: "Full-time" | "Part-time" | "Internship";
-    location: string;
-    remote: boolean;
-  };
-  bullets?: string[];
-  period: { start: number; end?: number };
-  child?: ExperienceItem;
+export interface WorkExperienceItem {
+  id: string;
+  name: string;
+  imageKey: string;
+  workExperienceItemEntries: WorkExperienceItemEntry[];
 }
 
 const getPortfolioAssets: RequestHandler = async (req, res, next) => {
@@ -83,30 +56,28 @@ const getPortfolioAssets: RequestHandler = async (req, res, next) => {
           },
         },
       }),
-      prisma.workExperience.findMany({
+      prisma.workExperienceItem.findMany({
         include: {
-          bullets: {
-            orderBy: { order: "asc" },
-          },
-          child: {
+          workExperienceItemEntries: {
+            orderBy: { orderNumber: "desc" },
             include: {
-              bullets: { orderBy: { order: "asc" } },
-              child: true,
+              bullets: {
+                orderBy: { order: "desc" },
+              },
             },
           },
         },
-        where: { parentId: null },
       }),
     ];
 
-    const [profileImageUrl, portfolioProjects, workExperiences]: [
+    const [profileImageUrl, portfolioProjects, workExperienceItemsInitial]: [
       string,
       PortfolioProjects[],
-      WorkExperienceWithRelations[],
+      WorkExperienceItem[],
     ] = (await Promise.all(promises)) as [
       string,
       PortfolioProjects[],
-      WorkExperienceWithRelations[],
+      WorkExperienceItem[],
     ];
 
     const portfolioProjectPromises = portfolioProjects.map(
@@ -131,60 +102,25 @@ const getPortfolioAssets: RequestHandler = async (req, res, next) => {
       },
     );
 
-    const experiencesPromises = workExperiences.map(async (e) => {
-      const experienceItem: ExperienceItem = {
-        meta: {
-          position: e.position,
-          type: e.type as "Full-time" | "Part-time" | "Internship",
-          location: e.location,
-          remote: e.remote,
-        },
-        period: { start: e.startPeriod, end: e.endPeriod ?? undefined },
-        bullets: e.bullets.sort((a, b) => a.order - b.order).map((b) => b.text),
-      };
-
-      if (e.name && e.imageKey) {
-        experienceItem["header"] = {
-          name: e.name,
-          imageUrl: await getR2Object(
+    const workExperienceItemsPromises = workExperienceItemsInitial.map(
+      async (item) => {
+        return {
+          ...item,
+          imageKey: await getR2Object(
             "hallowedvisions",
-            `workLogos/${e.imageKey}.webp`,
+            `workLogos/${item.imageKey}.webp`,
           ),
         };
-      }
-
-      const dfs = (experienceItem: ExperienceItem, e?: ExperienceNode) => {
-        if (!e) {
-          return;
-        }
-        const experienceItemChild: ExperienceItem = {
-          meta: {
-            position: e.position,
-            type: e.type as "Full-time" | "Part-time" | "Internship",
-            location: e.location,
-            remote: e.remote,
-          },
-          period: { start: e.startPeriod, end: e.endPeriod ?? undefined },
-          bullets: e.bullets
-            ?.sort((a, b) => a.order - b.order)
-            .map((b) => b.text),
-        };
-        experienceItem.child = experienceItemChild;
-        dfs(experienceItem.child, e.child ?? undefined);
-      };
-
-      dfs(experienceItem, e.child ?? undefined);
-      return experienceItem;
-    });
-
-    const [finalPortfolioProjects, experiences] = await Promise.all([
+      },
+    );
+    const [finalPortfolioProjects, workExperienceItems] = await Promise.all([
       Promise.all(portfolioProjectPromises),
-      Promise.all(experiencesPromises),
+      Promise.all(workExperienceItemsPromises),
     ]);
     res.status(200).json({
       profileImageUrl: profileImageUrl,
       portfolioProjects: finalPortfolioProjects,
-      experiences,
+      workExperienceItems,
     });
   } catch (error) {
     next(error);

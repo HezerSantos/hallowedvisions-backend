@@ -79,3 +79,34 @@ model ExperienceBullet {
   workExperienceId Int
   workExperience   WorkExperience @relation(fields: [workExperienceId], references: [id], onDelete: Cascade)
 }
+
+model WorkExperienceItem {
+  id       String @id @default(uuid(7))
+  name     String
+  imageKey String
+
+  workExperienceItemEntries WorkExperienceItemEntry[]
+}
+
+model WorkExperienceItemEntry {
+  id                   String @id @default(uuid(7))
+  position             String
+  type                 String
+  location             String
+  remote               Boolean
+  startPeriod          Int
+  endPeriod            Int?
+  orderNumber          Int     @default(0)
+  workExperienceItemId String
+  workExperienceItem   WorkExperienceItem @relation(fields: [workExperienceItemId], references: [id], onDelete: Cascade)
+
+  bullets WorkExperienceItemEntryBullets[]
+}
+
+model WorkExperienceItemEntryBullets {
+  id                        String                  @id @default(uuid(7))
+  text                      String
+  order                     Int                     @default(0)
+  workExperienceItemEntryId String
+  workExperienceItemEntry   WorkExperienceItemEntry @relation(fields: [workExperienceItemEntryId], references: [id], onDelete: Cascade)
+}

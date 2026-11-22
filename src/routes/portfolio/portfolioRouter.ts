@@ -1,10 +1,13 @@
-import { Router } from 'express'
-import getPortfolioAssets from '../../controllers/portfolio/GET/getPortfolioAssets'
-import getProjectAssets from '../../controllers/portfolio/GET/getProjectAssets'
+import { Router } from "express";
+import getPortfolioAssets from "../../controllers/portfolio/GET/getPortfolioAssets";
+import getProjectAssets from "../../controllers/portfolio/GET/getProjectAssets";
+import createWorkExperienceController from "../../controllers/portfolio/createWorkExperienceController";
 
-const portfolioRouter = Router()
+const portfolioRouter = Router();
 
-portfolioRouter.get("/", getPortfolioAssets)
-portfolioRouter.get("/:id", getProjectAssets)
+portfolioRouter.get("/", getPortfolioAssets);
+portfolioRouter.get("/:id", getProjectAssets);
 
-export default portfolioRouter
+portfolioRouter.post("/workExperience", createWorkExperienceController);
+
+export default portfolioRouter;
