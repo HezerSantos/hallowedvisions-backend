@@ -1,7 +1,6 @@
 import { RequestHandler } from "express";
 import getR2Object from "../../../services/getR2Object";
 import prisma from "../../../config/prisma";
-import { Prisma } from "@prisma/client";
 interface PortfolioProjects {
   id: number;
   name: string;
