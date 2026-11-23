@@ -105,7 +105,7 @@ const getPortfolioAssets: RequestHandler = async (req, res, next) => {
       async (item) => {
         return {
           ...item,
-          imageKey: await getR2Object(
+          imageUrl: await getR2Object(
             "hallowedvisions",
             `workLogos/${item.imageKey}.webp`,
           ),
